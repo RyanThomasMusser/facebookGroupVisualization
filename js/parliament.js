@@ -46,8 +46,8 @@ var parliamentApp = function(){
           height = 350 - margin.top - margin.bottom,
           gridSize = Math.floor(width / 24),
           legendElementWidth = gridSize*2,
-          buckets = 9,
-          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
+          buckets = 10,
+          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58","#000000"], // alternatively colorbrewer.YlGnBu[9]
           days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
           times = ["12p","1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p"];
 
@@ -199,8 +199,8 @@ var parliamentApp = function(){
 
     var diameter = 700,
         format = d3.format(",d"),
-        buckets = 9,
-        colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"]
+        buckets = 10,
+        colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58","#000000"]
 
     var bubble = d3.layout.pack()
         .sort(null)

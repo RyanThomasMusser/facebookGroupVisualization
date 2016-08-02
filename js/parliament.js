@@ -17,9 +17,8 @@ var parliamentApp = function(){
     baseHeatMapChart = heatmapChart()
     baseBubbleChart = bubbleChart()
 
-    $('#check-it-out-button').html("Let's take a look!")
-    $('#check-it-out-button').addClass('btn-success')
-    $('#check-it-out-button').removeClass('btn-primary')
+    $('#check-it-out-button').toggleClass('btn-primary', 1000).toggleClass('btn-success', 1000);
+    $('#check-it-out-button').html("&nbsp;Let's see it!&nbsp;")
     $('#check-it-out-button').removeClass('disabled')
 
     $('.void').on('click', function(e){

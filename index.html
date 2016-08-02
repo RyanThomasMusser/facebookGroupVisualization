@@ -20,7 +20,7 @@
     <div class="container">
 
       <div class="git-hub">
-        <a class="void" href="#">
+        <a href="https://github.com/RyanThomasMusser/facebookGroupVisualization" target="_blank">
           <button type="button" class="btn btn-xs btn-default">
             <span class="fa fa-github"></span> View on GitHub
           </button>
@@ -50,7 +50,12 @@
              and <a href="http://www.alchemyapi.com/products/alchemylanguage/sentiment-analysis" target="_blank">sentiment analysis</a>
              to harvest the data
            </p>
-          <p><button class="btn btn-primary btn-lg void disabled" id="check-it-out-button">Loading...</button></p>
+          <p>
+            <button class="btn btn-primary btn-lg void disabled" id="check-it-out-button">
+              Just a sec
+              <i class="fa fa-cog fa-spin"></i>
+            </button>
+          </p>
         </div>
 
         <div id="content-container" class="content-container">
@@ -99,14 +104,17 @@
               <h4>Technical Tools and Considerations</h4>
               <br/>
               <p class="lead">I spent roughly 10-15 hours on this project; I had a ton of fun.</p>
-              <p class="lead">I used, and made a PR for, the <a href="https://github.com/KyleAMathews/facebook-export" target="_blank">KyleAMathews/facebook-export</a> repository to retrieve the data from the Facebook group.</p>
+              <p class="lead">I used, and made a PR for, the <a href="https://github.com/KyleAMathews/facebook-export" target="_blank">KyleAMathews/facebook-export</a>
+                repository to retrieve the data from the Facebook group.</p>
               <p class="lead">
                 To visually display the data, I used <a href="https://d3js.org/" target="_blank">d3.js</a> for the user pages and
                 <a href="https://plot.ly/javascript/" target="_blank">plotly</a> for the 3D group chart.
                 I used <a href="http://www.alchemyapi.com/products/alchemylanguage/sentiment-analysis" target="_blank">alchemy</a> for NLP and sentiment analysis.
               </p>
               <p class="lead">
-                 The group yielded 35mb+ of data, including 625k+ commented words. Obviously, you don't want to process the entirety of this data within the DOM. I built an engine to distill these large data dumps into usable chunks; if you're interested in reviewing that, please check my <a href="https://github.com/RyanThomasMusser" target="_blank">Github repository</a>.
+                 The group yielded 35mb+ of data, including 625k+ commented words. Obviously, you don't want to process the entirety of this data within the DOM.
+                 I built an engine to distill these large data dumps into usable chunks; if you're interested in reviewing that,
+                 please check my <a href="https://github.com/RyanThomasMusser/facebookGroupVisualization" target="_blank">Github repository</a>.
               </p>
             </div>
           </div>

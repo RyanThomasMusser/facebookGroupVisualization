@@ -133,6 +133,12 @@
           var parliament = parliamentApp()
           //initialize the note app
           parliament.initialize(parliamentObject)
+
+          //try to do some adjusting for mobile
+          $('#group-graph').bind( "touchstart", function(e){
+            $('#group-graph').mousedown()
+          });
+
         })
       });
 

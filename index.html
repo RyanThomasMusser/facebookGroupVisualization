@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- a materiali bootstrap style theme -->
+    <link href="https://bootswatch.com/paper/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- some very simple custom styles -->
+    <link href="style/parliament.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="img/favicons/manifest.json">
+    <link rel="mask-icon" href="img/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="theme-color" content="#fdb813">
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="git-hub">
+        <a class="void" href="#">
+          <button type="button" class="btn btn-xs btn-default">
+            <span class="fa fa-github"></span> View on GitHub
+          </button>
+        </a>
+      </div>
+
+      <!-- NOTES -->
+      <div class="body-well">
+
+        <div id="loading-container" class="loading-container">
+          <!-- <div id="loading-gif">
+            <img src="img/dancing_owl.gif"/>
+          </div> -->
+          <h3>Visualizing A Facebook Group</h3>
+          <br/>
+          <p class="lead">
+            I pulled four years worth of data from a Facebook
+             group via
+             <a href="https://developers.facebook.com/docs/graph-api" target="_blank">Facebook's API</a>
+          <p/>
+          <p class="lead">
+             The group yielded 35mb+ of data, including 625k+ commented words
+           </p>
+           <p class="lead">
+             I used <a href="https://d3js.org/" target="_blank">d3.js</a>,
+             <a href="https://plot.ly/javascript/" target="_blank">plotly</a>,
+             and <a href="http://www.alchemyapi.com/products/alchemylanguage/sentiment-analysis" target="_blank">sentiment analysis</a>
+             to harvest the data
+           </p>
+          <p><button class="btn btn-primary btn-lg void disabled" id="check-it-out-button">Loading...</button></p>
+        </div>
+
+        <div id="content-container" class="content-container">
+          <div class="body-nav-container">
+            <ul class="nav nav-tabs">
+              <li class="active nav-tab"><a href="#group" data-toggle="tab">Group Overview</a></li>
+              <li class="dropdown nav-tab">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  View Individual User Data<span class="caret"></span>
+                </a>
+                <ul id="user-list" class="dropdown-menu">
+                </ul>
+              </li>
+              <li class="nav-tab"><a href="#about" data-toggle="tab">About This Project</a></li>
+            </ul>
+          </div>
+          <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in group" id="group">
+              <h5 class="text-primary">A 3D Graph of Contribution and Sentiment</h5>
+              <div id="group-graph"></div>
+              <span class="text-primary">Click and drag the graph to rotate in 3 dimensions. Scroll in the graph to zoom.</span>
+              <div id="gradient"></div>
+              <div class="gradient-legend">
+                <div class="pull-right">More Words Per Like</div>
+                <div class="pull-left">Less Words Per Like</div>
+              </div>
+            </div>
+            <div class="tab-pane user" id="user">
+              <h3 id="current-user-name"></h3>
+              <h5 class="text-primary">Day/Hour Heatmap of Words Contributed</h5>
+              <div id="chart"></div>
+              <h5 class="text-primary">Visualization of Commonly Used Terms</h5>
+              <div id="bubble"></div>
+            </div>
+            <div class="tab-pane fade" id="about">
+              <br/>
+              <h4>Group Context</h4>
+              <br/>
+              <p class="lead">Obviously, I've replaced the users' real names with placeholders to protect their privacy. For reference, however, <b>I am User #6</b>.</p>
+              <p class="lead">This data paints a very unfortunate picture for User #7 - and as you may be able to tell from the data - User #7 is the heel of the group.</p>
+              <p class="lead">The group is, generally, a sports related discussion forum. Should you be interested in more infomation on the group itself, see the public <a href="https://twitter.com/parliamentweets" target="_blank">Twitter page</a>.</p>
+              <div class="center-image">
+                <img src="img/parliament.jpg"/>
+              </div>
+              <hr/>
+              <h4>Technical Tools and Considerations</h4>
+              <br/>
+              <p class="lead">I spent roughly 10-15 hours on this project; I had a ton of fun.</p>
+              <p class="lead">I used, and made a PR for, the <a href="https://github.com/KyleAMathews/facebook-export" target="_blank">KyleAMathews/facebook-export</a> repository to retrieve the data from the Facebook group.</p>
+              <p class="lead">
+                To visually display the data, I used <a href="https://d3js.org/" target="_blank">d3.js</a> for the user pages and
+                <a href="https://plot.ly/javascript/" target="_blank">plotly</a> for the 3D group chart.
+                I used <a href="http://www.alchemyapi.com/products/alchemylanguage/sentiment-analysis" target="_blank">alchemy</a> for NLP and sentiment analysis.
+              </p>
+              <p class="lead">
+                 The group yielded 35mb+ of data, including 625k+ commented words. Obviously, you don't want to process the entirety of this data within the DOM. I built an engine to distill these large data dumps into usable chunks; if you're interested in reviewing that, please check my <a href="https://github.com/RyanThomasMusser" target="_blank">Github repository</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- /NOTES -->
+
+
+    </div>
+
+    <!-- jQuery and Bootstrap's JavaScript-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="http://d3js.org/d3.v3.js"></script>
+
+    <script src="js/parliament.js"></script>
+    <script>
+
+      $( document ).ready(function() {
+        $( 'body' ).animate({opacity: 1},1000,function(){
+          //instantiate the note app
+          var parliament = parliamentApp()
+          //initialize the note app
+          parliament.initialize(parliamentObject)
+        })
+      });
+
+    </script>
+    <script src="lib/output/refined_output.json"></script>
+  </body>
+</html>

@@ -1,0 +1,129 @@
+html{
+  height:100%;
+}
+
+body{
+  opacity: 0;
+  height:100%;
+}
+
+.container{
+  height:100%;
+}
+
+.body-well{
+  height:100%;
+  width:100%;
+  padding:20px;
+  display: table;
+}
+
+.loading-container{
+  display: table-cell;
+  height:100%;
+  width:100%;
+  text-align:center;
+  vertical-align: middle;
+}
+
+.content-container{
+  display:none;
+  margin: 0 auto;
+  width:700px;
+}
+
+.body-nav-container{
+  width:100%;
+  text-align:center;
+}
+
+.body-nav-container .nav {
+    display: inline-block;
+}
+
+.nav-tab{
+  margin-left:10px;
+  margin-right:10px;
+}
+
+.modebar{
+  display:none;
+}
+
+.gradient{
+  display: inline;
+  width:500px;
+  height:10px;
+  margin:0 auto;
+}
+
+.gradient-step {
+  height:10px;
+  width:5%;
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  opacity:1;
+}
+
+.git-hub{
+  width:100%;
+  text-align:right;
+  height:0px;
+  overflow:visible;
+}
+
+.group{
+  text-align: center;
+  width:700px;
+}
+
+#group-graph{
+  cursor:pointer;
+  overflow:visible;
+}
+
+.gradient-legend{
+  width: 100%;
+}
+
+#user-list{
+  margin-left:10px;
+  margin-right:10px;
+}
+
+.user-list-element{
+  text-align:center;
+}
+
+.center-image{
+  width:100%;
+  text-align: center;
+}
+
+#about h4{
+  text-align:center;
+}
+
+rect.bordered {
+  stroke: #E6E6E6;
+  stroke-width:2px;
+}
+
+text.mono {
+  font-size: 9pt;
+  font-family: Consolas, courier;
+  fill: #aaa;
+}
+
+text.axis-workweek {
+  fill: #000;
+}
+
+text.axis-worktime {
+  fill: #000;
+}
+
+.user{
+  text-align: center;
+}

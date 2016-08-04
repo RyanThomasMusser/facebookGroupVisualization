@@ -81,6 +81,8 @@ body{
 #group-graph{
   cursor:pointer;
   overflow:visible;
+  width:500px;
+  margin:0 auto;
 }
 
 .gradient-legend{
@@ -141,13 +143,15 @@ path.chord {
   stroke-width: .25px;
 }
 
-#chordCircle:hover path.fade {
-  display: none;
+#chordCircle:hover path.fadechord {
+  opacity: .1;
 }
 
 #chord{
-  margin-top:50px;
+  margin-top: 65px !important;
   height:600px;
+  width:500px;
+  margin: 0 auto;
 }
 
 .current-user{

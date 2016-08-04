@@ -84,7 +84,7 @@
               </div>
               <div id="chord">
                 <h5 class="text-primary">Mapped User Interactions</h5>
-                <span class="text-primary">Hover over a single user to view their specific map.</span>
+                <span class="text-primary">Hover over a user to view their map. Hover over a chord to view statistics.</span>
               </div>
             </div>
             <div class="tab-pane user" id="user">
@@ -253,7 +253,7 @@
           });
 
           function mouseover(d, i) {
-            chord.classed("fade", function(p) {
+            chord.classed("fadechord", function(p) {
               return p.source.index != i
                   && p.target.index != i;
             });

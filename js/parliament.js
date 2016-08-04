@@ -342,7 +342,7 @@ var parliamentApp = function(){
               size: 11,
             },
             showexponent: 'all',
-            zeroline: 'false'
+            zeroline: false
         },
         yaxis: {
             title: 'Total Words',
@@ -352,7 +352,7 @@ var parliamentApp = function(){
               size: 11,
             },
             showexponent: 'all',
-            zeroline: 'false'
+            zeroline: false
         },
         zaxis: {
           title: 'Total Posts',
@@ -362,13 +362,13 @@ var parliamentApp = function(){
             size: 11,
           },
           showexponent: 'all',
-          zeroline: 'false'
+          zeroline: false
         }
       },
       showlegend: false
     }
 
-    Plotly.newPlot('group-graph', data, layout)
+    Plotly.newPlot('group-graph', data, layout, {scrollZoom: false})
   }
   //
   //

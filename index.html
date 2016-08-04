@@ -177,8 +177,6 @@
               outerRadius = Math.min(width, height) / 2 - 10,
               innerRadius = outerRadius - 24;
 
-          var formatPercent = d3.format(".1%");
-
           var arc = d3.svg.arc()
               .innerRadius(innerRadius)
               .outerRadius(outerRadius);
@@ -248,10 +246,10 @@
           chord.append("title").text(function(d) {
             return users[d.source.index].name
                 + " → " + users[d.target.index].name
-                + ": " + formatPercent(d.source.value)
+                + ": " + d.source.value
                 + "\n" + users[d.target.index].name
                 + " → " + users[d.source.index].name
-                + ": " + formatPercent(d.target.value);
+                + ": " + d.target.value;
           });
 
           function mouseover(d, i) {

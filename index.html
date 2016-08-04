@@ -74,7 +74,7 @@
           </div>
           <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in group" id="group">
-              <h5 class="text-primary">A 3D Graph of Contribution and Sentiment</h5>
+              <h5 class="text-primary">A 3D Graph of Contribution and Engagement</h5>
               <div id="group-graph"></div>
               <span class="text-primary">Click and drag the graph to rotate in 3 dimensions. Scroll in the graph to zoom.</span>
               <div id="gradient"></div>
@@ -82,10 +82,22 @@
                 <div class="pull-right">More Words Per Like</div>
                 <div class="pull-left">Less Words Per Like</div>
               </div>
+              <div id="chord">
+                <h5 class="text-primary">Mapped User Interactions</h5>
+                <span class="text-primary">Hover over a single user to view their specific map.</span>
+              </div>
             </div>
             <div class="tab-pane user" id="user">
-              <h3 id="current-user-name"></h3>
-              <h5 class="text-primary">Day/Hour Heatmap of Words Contributed</h5>
+
+              <div id="current-user-container">
+                <h3 id="current-user-name"></h3>
+                <span id="current-user-words" class="label label-primary current-user"></span>
+                <span id="current-user-posts" class="label label-primary current-user"></span>
+                <span id="current-user-likes" class="label label-primary current-user"></span>
+                <span id="current-user-words-per-like" class="label label-primary current-user"></span>
+              </div>
+
+              <h5 class="text-primary">Day/Hour Heatmap of Posts Contributed</h5>
               <div id="chart"></div>
               <h5 class="text-primary">Visualization of Commonly Used Terms</h5>
               <div id="bubble"></div>
@@ -130,27 +142,135 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
 
     <script src="js/parliament.js"></script>
     <script>
 
+      //instantiate the app
+      var parliament = parliamentApp()
+
       $( document ).ready(function() {
+
         $( 'body' ).animate({opacity: 1},1000,function(){
-          //instantiate the note app
-          var parliament = parliamentApp()
-          //initialize the note app
-          parliament.initialize(parliamentObject)
+          //initialize the app
+          parliament.initialize(userObject)
 
           //try to do some adjusting for mobile
           $('#group-graph').bind( "touchstart", function(e){
             $('#group-graph').mousedown()
           });
 
+          var matrix = parliament.fetchMatrix()
+          var users = parliament.fetchChords()
+
+          drawChords(users,matrix)
+
         })
+
+        //
+        //
+        function drawChords(users,matrix){
+
+          var width = 500,
+              height = 500,
+              outerRadius = Math.min(width, height) / 2 - 10,
+              innerRadius = outerRadius - 24;
+
+          var formatPercent = d3.format(".1%");
+
+          var arc = d3.svg.arc()
+              .innerRadius(innerRadius)
+              .outerRadius(outerRadius);
+
+          var layout = d3.layout.chord()
+              .padding(.04)
+              .sortSubgroups(d3.descending)
+              .sortChords(d3.ascending);
+
+          var path = d3.svg.chord()
+              .radius(innerRadius);
+
+          var svg = d3.select("#chord").append("svg")
+              .attr("width", width)
+              .attr("height", height)
+            .append("g")
+              .attr("id", "chordCircle")
+              .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+          svg.append("circle")
+              .attr("r", outerRadius);
+
+          // Compute the chord layout.
+          layout.matrix(matrix);
+
+          // Add a group per neighborhood.
+          var group = svg.selectAll(".group")
+              .data(layout.groups)
+            .enter().append("g")
+              .attr("class", "group")
+              .on("mouseover", mouseover);
+
+          // Add a mouseover title.
+          group.append("title").text(function(d, i) {
+            return users[i].name;
+          });
+
+          // Add the group arc.
+          var groupPath = group.append("path")
+              .attr("id", function(d, i) { return "group" + i; })
+              .attr("d", arc)
+              .style("fill", function(d, i) { return users[i].color; });
+
+          // Add a text label.
+          var groupText = group.append("text")
+              .attr("x", 6)
+              .attr("dy", 15);
+
+          groupText.append("textPath")
+              .attr("xlink:href", function(d, i) { return "#group" + i; })
+              .text(function(d, i) { return users[i].name; });
+
+          // Remove the labels that don't fit. :(
+          groupText.filter(function(d, i) { return groupPath[0][i].getTotalLength() / 2 - 16 < 46; })
+              .remove();
+
+
+          // Add the chords.
+          var chord = svg.selectAll(".chord")
+              .data(layout.chords)
+            .enter().append("path")
+              .attr("class", "chord")
+              .style("fill", function(d) { return users[d.source.index].color; })
+              .attr("d", path);
+
+          // Add an elaborate mouseover title for each chord.
+          chord.append("title").text(function(d) {
+            return users[d.source.index].name
+                + " → " + users[d.target.index].name
+                + ": " + formatPercent(d.source.value)
+                + "\n" + users[d.target.index].name
+                + " → " + users[d.source.index].name
+                + ": " + formatPercent(d.target.value);
+          });
+
+          function mouseover(d, i) {
+            chord.classed("fade", function(p) {
+              return p.source.index != i
+                  && p.target.index != i;
+            });
+          }
+
+        }
+        //
+        //
+
       });
 
     </script>
+
+
+
     <script src="lib/output/refined_output.json"></script>
   </body>
 </html>

@@ -111,8 +111,7 @@ rect.bordered {
 }
 
 text.mono {
-  font-size: 9pt;
-  font-family: Consolas, courier;
+  font-size: 8pt;
   fill: #aaa;
 }
 
@@ -126,4 +125,35 @@ text.axis-worktime {
 
 .user{
   text-align: center;
+}
+
+#chordCircle circle {
+  fill: none;
+  pointer-events: all;
+}
+
+.group path {
+  fill-opacity: .5;
+}
+
+path.chord {
+  stroke: #000;
+  stroke-width: .25px;
+}
+
+#chordCircle:hover path.fade {
+  display: none;
+}
+
+#chord{
+  margin-top:50px;
+  height:600px;
+}
+
+.current-user{
+  font-size:105%;
+}
+
+#current-user-container{
+  margin-bottom:35px;
 }

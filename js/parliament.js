@@ -4,13 +4,20 @@ var parliamentApp = function(){
   var active_user
   var data_object
   var baseHeatMapChart
-  /*Private methods*/
+  var colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58","#000000"]
+  var matrix
+  var chords
+  /* /Encapsulated vars*/
 
+
+  /*Private methods*/
   //
   //
   function initialize(data){
     //encapsulate the external data object
-    data_object = data
+    data_object = data.users
+    matrix = data.matrix
+    chords = data.chords
 
     generateGradient()
     append3DGroup()
@@ -46,7 +53,6 @@ var parliamentApp = function(){
           gridSize = Math.floor(width / 24),
           legendElementWidth = gridSize*2,
           buckets = 10,
-          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58","#000000"], // alternatively colorbrewer.YlGnBu[9]
           days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
           times = ["12p","1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p"];
 
@@ -76,6 +82,9 @@ var parliamentApp = function(){
             .attr("transform", "translate(" + gridSize / 2 + ", -6)")
             .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
 
+      //this creates a relative scale based on the data
+      //it's somehwat intensive for what it does so I don't
+      //want to repeat this process each time I'm rendering a user
       function setHeatMapColorScale(){
 
         var median_word_count_user_activity
@@ -84,12 +93,11 @@ var parliamentApp = function(){
 
         //get ready to organize users
         Object.keys(data_object).map( function(user){
-
           var user = [ data_object[user].total_words , user ]
           users.push(user)
-
         });
         //
+
         //sort our array
         users.sort(function (a, b) {
 
@@ -111,11 +119,9 @@ var parliamentApp = function(){
         Object.keys(median_word_count_user_activity).map(
           function(day) {
             for(var hour = 1; hour <= 24 ; hour++) {
-              if(!median_word_count_user_activity[day][hour]){
-                data.push({day: +day+1,hour: +hour,value: 0})
-              }else{
-                data.push({day: +day+1,hour: +hour,value: +median_word_count_user_activity[day][hour]})
-              }
+              if(!median_word_count_user_activity[day]) median_word_count_user_activity[day] = {}
+              if(!median_word_count_user_activity[day][hour]) median_word_count_user_activity[day][hour] = 0
+              data.push({day: +day+1,hour: +hour,value: +median_word_count_user_activity[day][hour]})
             }
           }
         );
@@ -125,23 +131,20 @@ var parliamentApp = function(){
             .range(colors);
       }
 
+      //capture the scale for repeated quick use
       var colorScale = setHeatMapColorScale()
 
       return {
         render: function(userNode){
           var data = []
 
-          Object.keys(userNode).map(
-            function(day) {
-              for(var hour = 1; hour <= 24 ; hour++) {
-                if(!userNode[day][hour]){
-                  data.push({day: +day+1,hour: +hour,value: 0})
-                }else{
-                  data.push({day: +day+1,hour: +hour,value: +userNode[day][hour]})
-                }
-              }
+          for(var day = 0; day <= 6 ; day++) {
+            for(var hour = 1; hour <= 24 ; hour++) {
+              if(!userNode[day]) userNode[day] = {}
+              if(!userNode[day][hour]) userNode[day][hour] = 0
+              data.push({day: +day+1,hour: +hour,value: +userNode[day][hour]})
             }
-          );
+          }
 
           var cards = svg.selectAll(".hour")
               .data(data, function(d) {return d.day+':'+d.hour;});
@@ -198,8 +201,7 @@ var parliamentApp = function(){
 
     var diameter = 700,
         format = d3.format(",d"),
-        buckets = 10,
-        colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58","#000000"]
+        buckets = 10
 
     var bubble = d3.layout.pack()
         .sort(null)
@@ -287,16 +289,17 @@ var parliamentApp = function(){
       var name = data_object[value].name
       var id = data_object[value].id
       var total_words = data_object[value].total_words
+      var total_posts = data_object[value].total_posts
       var total_likes = data_object[value].total_likes
       var words_per_like = (total_words/total_likes).toFixed(2)
-      appendUserLis(id,name)
+      appendUserLi(id,name)
 
       var colorValue =  parseFloat( ( words_per_like / 45 ).toFixed(2) )
       var color = getColor(colorValue)
       var userPlot = {
         x: [ total_likes ],
-        y: [ words_per_like ],
-        z: [ total_words ],
+        y: [ total_words ],
+        z: [ total_posts ],
         mode: 'markers',
         marker: {
           color: color,
@@ -342,7 +345,7 @@ var parliamentApp = function(){
             zeroline: 'false'
         },
         yaxis: {
-            title: 'Words per Like',
+            title: 'Total Words',
             ticks: '',
             tickfont: {
               color: 'rgb(204, 204, 204)',
@@ -352,7 +355,7 @@ var parliamentApp = function(){
             zeroline: 'false'
         },
         zaxis: {
-          title: 'Total Words',
+          title: 'Total Posts',
           ticks: '',
           tickfont: {
             color: 'rgb(204, 204, 204)',
@@ -389,7 +392,6 @@ var parliamentApp = function(){
   //
   function getColor(value){
       //value from 0 to 1
-      var colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58","#000000"]
       if(value>=1){
         return colors[9]
       }else if(value<=0){
@@ -398,6 +400,10 @@ var parliamentApp = function(){
         var index = parseInt( value*10 )
         return colors[index]
       }
+      //the below code returns a color value
+      //from red to green while avoiding the weird
+      //brown color that lies between the two colors
+      //and replaces that with a nice yellow
       // var hue=((1-value)*120).toString(10);
       // return ["hsl(",hue,",100%,50%)"].join("")
   }
@@ -406,7 +412,7 @@ var parliamentApp = function(){
 
   //
   //
-  function appendUserLis(id,name){
+  function appendUserLi(id,name){
     var elementId = 'user-list-'+id
     var li = '<li class="user-list-element" id="'+elementId+'"><a href="#user" data-toggle="tab" class="void"><small>'+name+'</small></a></li>'
     //insertAdjacentHTML is WAY faster than jquery
@@ -420,7 +426,15 @@ var parliamentApp = function(){
   //
   function attachUserClickEvent( elementId , id ){
     document.getElementById(elementId).addEventListener('click', function(){
+      var total_words = data_object[id].total_words
+      var total_posts = data_object[id].total_posts
+      var total_likes = data_object[id].total_likes
+      var words_per_like = (total_words/total_likes).toFixed(2)
       $('#current-user-name').html(data_object[id].name)
+      $('#current-user-words').html(total_words+' total words')
+      $('#current-user-posts').html(total_posts+' posts')
+      $('#current-user-likes').html(total_likes+' likes earned')
+      $('#current-user-words-per-like').html(words_per_like+' words/like')
       renderUserHeatMap(id)
       renderUserBubbleChart(id)
     })
@@ -443,23 +457,25 @@ var parliamentApp = function(){
   }
   //
   //
+  /* /Private methods*/
 
   /*Public methods*/
   return{
     /*
     initialize()
-
-    * basic checking for browser storage availability
-    * adds our baseline event listeners
-
-    this is the only public method of noteApp and
-    it calls the private method initialize()
     */
     initialize : function(data){
       initialize(data)
+    },
+    fetchMatrix: function(){
+      return matrix
+    },
+    fetchChords: function(){
+      return chords
     }
     // /initialize()
 
   }// /return
+  /* /Public methods*/
 
 }
